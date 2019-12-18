@@ -1,0 +1,91 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftWebConsole
+  creationTimestamp: '2019-12-18T14:55:29Z'
+  generation: 2
+  labels:
+    app: nginx-ex
+  name: nginx-ex
+  namespace: nginx
+  resourceVersion: '271685'
+  selfLink: /apis/apps.openshift.io/v1/namespaces/nginx/deploymentconfigs/nginx-ex
+  uid: 6f06c9a1-21a6-11ea-a0d4-9a9fad050e34
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: nginx-ex
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-ex
+        deploymentconfig: nginx-ex
+    spec:
+      containers:
+        - image: >-
+            172.30.1.1:5000/nginx/nginx-ex@sha256:0a724edb3cf0ddce700040924262d0ca88a4c26bad26deac218357a25bfda30b
+          imagePullPolicy: Always
+          name: nginx-ex
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - nginx-ex
+        from:
+          kind: ImageStreamTag
+          name: 'nginx-ex:latest'
+          namespace: nginx
+        lastTriggeredImage: >-
+          172.30.1.1:5000/nginx/nginx-ex@sha256:0a724edb3cf0ddce700040924262d0ca88a4c26bad26deac218357a25bfda30b
+      type: ImageChange
+    - type: ConfigChange
+status:
+  availableReplicas: 1
+  conditions:
+    - lastTransitionTime: '2019-12-18T14:56:47Z'
+      lastUpdateTime: '2019-12-18T14:56:47Z'
+      message: Deployment config has minimum availability.
+      status: 'True'
+      type: Available
+    - lastTransitionTime: '2019-12-18T14:56:48Z'
+      lastUpdateTime: '2019-12-18T14:56:48Z'
+      message: replication controller "nginx-ex-1" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: 'True'
+      type: Progressing
+  details:
+    causes:
+      - type: ConfigChange
+    message: config change
+  latestVersion: 1
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1
